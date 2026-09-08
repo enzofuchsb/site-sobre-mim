@@ -1,0 +1,519 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Enzo Fuchs Bento — Desenvolvedor de Software em Formação</title>
+<meta name="description" content="Portfólio de Enzo Fuchs Bento — estudante de ADS, desenvolvedor em formação, projetos de software e hardware.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Anton&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@500;600&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --bg: #0a0e0f;
+    --surface: #131a1c;
+    --surface-2: #171f21;
+    --line: rgba(232,237,238,0.09);
+    --line-strong: rgba(232,237,238,0.16);
+    --text: #e8edee;
+    --text-muted: #8a9a9c;
+    --text-faint: #5c6a6c;
+    --amber: #ffb454;
+    --amber-dim: rgba(255,180,84,0.14);
+    --cyan: #4fd6e8;
+    --radius: 3px;
+  }
+
+  *{ box-sizing: border-box; }
+  html{ scroll-behavior: smooth; }
+  @media (prefers-reduced-motion: reduce){
+    html{ scroll-behavior: auto; }
+    *{ animation-duration: 0.01ms !important; animation-iteration-count: 1 !important; transition-duration: 0.01ms !important; }
+  }
+
+  body{
+    margin:0;
+    background: var(--bg);
+    color: var(--text);
+    font-family: 'Inter', -apple-system, sans-serif;
+    line-height: 1.6;
+    -webkit-font-smoothing: antialiased;
+    overflow-x: hidden;
+  }
+
+  h1,h2,h3{
+    font-family: 'Anton', sans-serif;
+    line-height: 1.08;
+    margin: 0;
+    font-weight: 400;
+    letter-spacing: 0.003em;
+  }
+
+  .mono{ font-family: 'JetBrains Mono', monospace; }
+
+  a{ color: inherit; }
+  img{ max-width: 100%; display:block; }
+
+  :focus-visible{
+    outline: 2px solid var(--cyan);
+    outline-offset: 3px;
+  }
+
+  .wrap{
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 0 32px;
+  }
+
+  /* ---------- INTERACTIVE NEON BACKGROUND ---------- */
+  .bg-fx{
+    position: fixed;
+    inset: 0;
+    z-index: 0;
+    overflow: hidden;
+    pointer-events: none;
+  }
+  .glow{
+    position: absolute;
+    top: 0; left: 0;
+    border-radius: 50%;
+    filter: blur(100px);
+    will-change: transform;
+    transition: transform .6s cubic-bezier(.16,.8,.4,1);
+  }
+  .glow-a{
+    width: 620px; height: 620px;
+    margin: -310px 0 0 -310px;
+    background: radial-gradient(circle, rgba(255,180,84,0.55), transparent 62%);
+    opacity: .6;
+    animation: driftA 22s ease-in-out infinite;
+  }
+  .glow-b{
+    width: 480px; height: 480px;
+    margin: -240px 0 0 -240px;
+    background: radial-gradient(circle, rgba(79,214,232,0.5), transparent 62%);
+    opacity: .5;
+    animation: driftB 28s ease-in-out infinite;
+    transition: transform 1s cubic-bezier(.16,.8,.4,1);
+  }
+  @keyframes driftA{
+    0%,100%{ transform: translate3d(18vw,22vh,0); }
+    50%{ transform: translate3d(62vw,55vh,0); }
+  }
+  @keyframes driftB{
+    0%,100%{ transform: translate3d(75vw,60vh,0); }
+    50%{ transform: translate3d(28vw,20vh,0); }
+  }
+
+  /* content must sit above the fixed glow layer */
+  header.nav{ position: fixed; }
+  main, footer{ position: relative; z-index: 1; }
+
+  /* ---------- NAV ---------- */
+  header.nav{
+    top:0; left:0; right:0;
+    z-index: 100;
+    backdrop-filter: blur(10px);
+    background: rgba(10,14,15,0.72);
+    border-bottom: 1px solid transparent;
+    transition: border-color .3s ease, background .3s ease;
+  }
+  header.nav.scrolled{ border-bottom-color: var(--line); }
+  .nav-inner{
+    max-width: 1120px;
+    margin: 0 auto;
+    padding: 16px 32px;
+    display:flex;
+    align-items:center;
+    justify-content: space-between;
+  }
+  .nav-brand{
+    font-family:'Anton', sans-serif;
+    font-size: 1.3rem;
+    letter-spacing: 0.01em;
+    display:flex;
+    align-items:center;
+    gap:9px;
+  }
+  .nav-brand .dot{
+    width:7px; height:7px; border-radius:50%;
+    background: var(--amber);
+    box-shadow: 0 0 8px 1px var(--amber);
+    animation: blink 2.6s ease-in-out infinite;
+  }
+  @keyframes blink{ 0%,100%{ opacity:1; } 50%{ opacity:.35; } }
+  .nav-links{
+    display:flex;
+    gap: 30px;
+    list-style:none;
+    margin:0; padding:0;
+    font-size: 0.92rem;
+    color: var(--text-muted);
+  }
+  .nav-links a{ text-decoration:none; transition: color .2s ease; padding: 4px 0; }
+  .nav-links a:hover{ color: var(--text); }
+  .nav-toggle{
+    display:none;
+    background:none;
+    border:1px solid var(--line-strong);
+    border-radius: var(--radius);
+    color: var(--text);
+    width:38px; height:34px;
+    cursor:pointer;
+  }
+
+  @media (max-width: 720px){
+    .nav-links{
+      position:absolute; top: 100%; left:0; right:0;
+      background: #0d1214;
+      border-bottom: 1px solid var(--line);
+      flex-direction:column; gap:0;
+      padding: 6px 32px;
+      max-height:0; overflow:hidden;
+      transition: max-height .25s ease;
+    }
+    .nav-links.open{ max-height: 260px; }
+    .nav-links li{ border-top: 1px solid var(--line); }
+    .nav-links a{ display:block; padding: 14px 0; }
+    .nav-toggle{ display:block; }
+  }
+
+  section{ padding: 110px 0 0; }
+  section:first-of-type{ padding-top: 190px; }
+
+  .eyebrow{
+    display:block;
+    font-family: 'Inter', sans-serif;
+    font-weight: 600;
+    font-size: 0.95rem;
+    color: var(--cyan);
+    margin-bottom: 14px;
+  }
+
+  /* ---------- HERO ---------- */
+  .hero{ max-width: 640px; }
+  .hero h1{ font-size: clamp(2.6rem, 6vw, 4.2rem); }
+  .hero .role{
+    margin-top:16px;
+    font-size: 1.2rem;
+    color: var(--amber);
+    font-family:'Anton', sans-serif;
+    letter-spacing: 0.005em;
+  }
+  .hero p.lede{
+    margin-top: 22px;
+    color: var(--text-muted);
+    font-size: 1.05rem;
+  }
+  .hero-actions{ margin-top: 36px; display:flex; gap:14px; flex-wrap:wrap; }
+  .btn{
+    display:inline-flex; align-items:center; gap:8px;
+    padding: 13px 22px;
+    border-radius: var(--radius);
+    font-size: 0.92rem; font-weight: 500;
+    text-decoration:none; cursor:pointer;
+    border: 1px solid transparent;
+    transition: transform .15s ease, box-shadow .15s ease, background .15s ease, border-color .15s ease, color .15s ease;
+  }
+  .btn:active{ transform: translateY(1px); }
+  .btn-primary{ background: var(--amber); color: #1a1206; }
+  .btn-primary:hover{ box-shadow: 0 0 0 1px var(--amber), 0 0 22px rgba(255,180,84,0.35); }
+  .btn-ghost{ border-color: var(--line-strong); color: var(--text); background: transparent; }
+  .btn-ghost:hover{ border-color: var(--cyan); color: var(--cyan); }
+
+  /* ---------- SOBRE ---------- */
+  .about{ display:grid; grid-template-columns: 220px 1fr; gap: 48px; align-items:start; }
+  .about-photo{
+    border-radius: 6px; overflow:hidden;
+    border: 1px solid var(--line-strong);
+    position:relative;
+  }
+  .about-photo::after{
+    content:''; position:absolute; inset:0;
+    background: linear-gradient(180deg, transparent 60%, rgba(10,14,15,0.5));
+    pointer-events:none;
+  }
+  .about h2{ font-size: 1.9rem; }
+  .about p{ color: var(--text-muted); max-width: 62ch; margin: 18px 0 0; }
+  .about-meta{ margin-top: 24px; display:flex; flex-wrap:wrap; gap: 10px 30px; font-size: 0.86rem; }
+  .about-meta div{ color: var(--text-faint); }
+  .about-meta strong{ color: var(--text); font-weight:600; display:block; font-size: 0.92rem; margin-top:3px; }
+
+  @media (max-width: 720px){
+    .about{ grid-template-columns: 1fr; }
+    .about-photo{ width: 160px; }
+  }
+
+  /* ---------- SKILLS ---------- */
+  .skill-groups{ display:grid; grid-template-columns: repeat(auto-fit, minmax(230px, 1fr)); gap: 22px; margin-top: 40px; }
+  .skill-card{ background: var(--surface); border: 1px solid var(--line); border-radius: 5px; padding: 22px; }
+  .skill-card h3{
+    font-family:'Inter', sans-serif; font-weight:600;
+    font-size: 0.9rem; color: var(--text-muted); letter-spacing: 0.01em;
+  }
+  .chip-row{ display:flex; flex-wrap:wrap; gap: 8px; margin-top: 16px; }
+  .chip{
+    font-size: 0.82rem; padding: 6px 12px; border-radius: var(--radius);
+    border: 1px solid var(--line-strong); color: var(--text);
+    background: rgba(255,255,255,0.02);
+  }
+
+  /* ---------- PROJETO ---------- */
+  .project{
+    background: var(--surface); border: 1px solid var(--line); border-radius: 6px;
+    padding: 40px; display:grid; grid-template-columns: 1.05fr 0.95fr; gap: 44px; align-items:center;
+  }
+  .project-tag{
+    display:inline-flex; align-items:center; gap:7px;
+    font-family:'Inter', sans-serif; font-weight: 600; font-size: 0.76rem;
+    color: var(--amber); background: var(--amber-dim);
+    border: 1px solid rgba(255,180,84,0.3); padding: 5px 11px; border-radius: 20px;
+  }
+  .project-tag .led{ width:6px; height:6px; border-radius:50%; background: var(--amber); box-shadow: 0 0 6px var(--amber); }
+  .project h3{ margin-top: 18px; font-size: 1.7rem; }
+  .project p{ color: var(--text-muted); margin-top: 14px; max-width: 50ch; }
+  .project ul{ margin: 20px 0 0; padding: 0; list-style:none; display:flex; flex-direction:column; gap: 10px; }
+  .project ul li{ font-size: 0.86rem; color: var(--text-muted); padding-left: 18px; position:relative; }
+  .project ul li::before{ content:''; position:absolute; left:0; top:8px; width:8px; height:1px; background: var(--cyan); }
+  .project-cta{ margin-top: 26px; }
+
+  .greenhouse{ background: rgba(0,0,0,0.24); border: 1px solid var(--line); border-radius: 5px; padding: 22px; }
+  .gh-row{ display:flex; justify-content:space-between; align-items:center; font-family:'JetBrains Mono', monospace; font-size: 0.76rem; color: var(--text-faint); margin-bottom: 16px; }
+  .gh-bars{ display:flex; flex-direction:column; gap:16px; }
+  .gh-bar-label{ display:flex; justify-content:space-between; font-size: 0.8rem; color: var(--text-muted); margin-bottom:6px; }
+  .gh-bar-label .v{ font-family:'JetBrains Mono', monospace; color: var(--text); }
+  .gh-track{ height: 8px; background: rgba(255,255,255,0.06); border-radius: 20px; overflow:hidden; }
+  .gh-fill{ height:100%; border-radius: 20px; transition: width .6s ease; }
+  .gh-fill.moist{ background: linear-gradient(90deg, #1e5f4f, var(--cyan)); }
+  .gh-fill.air{ background: linear-gradient(90deg, #6b4a1e, var(--amber)); }
+  .gh-note{ margin-top: 18px; font-size: 0.76rem; color: var(--text-faint); line-height: 1.5; }
+
+  @media (max-width: 860px){ .project{ grid-template-columns: 1fr; padding: 28px; } }
+
+  /* ---------- CTA GITHUB ---------- */
+  .gh-banner{
+    text-align:center; padding: 64px 40px;
+    border: 1px dashed var(--line-strong); border-radius: 6px;
+    background: rgba(79,214,232,0.03);
+  }
+  .gh-banner h2{ font-size: 2rem; }
+  .gh-banner p{ color: var(--text-muted); margin: 14px auto 0; max-width: 48ch; }
+  .gh-banner .btn{ margin-top: 28px; }
+
+  /* ---------- FOOTER / CONTATO ---------- */
+  footer{ margin-top: 130px; border-top: 1px solid var(--line); padding: 46px 0 40px; }
+  .footer-inner{ display:flex; justify-content:space-between; align-items:center; flex-wrap: wrap; gap: 20px; }
+  .footer-links{ display:flex; gap: 22px; list-style:none; padding:0; margin:0; }
+  .footer-links a{ text-decoration:none; color: var(--text-muted); font-size: 0.9rem; display:flex; align-items:center; gap:8px; transition: color .2s ease; }
+  .footer-links a:hover{ color: var(--cyan); }
+  .footer-note{ font-size: 0.85rem; color: var(--text-faint); }
+</style>
+</head>
+<body>
+
+<div class="bg-fx" aria-hidden="true">
+  <span class="glow glow-a" id="glowA"></span>
+  <span class="glow glow-b" id="glowB"></span>
+</div>
+
+<header class="nav" id="siteNav">
+  <div class="nav-inner">
+    <div class="nav-brand"><span class="dot"></span>Fuchs</div>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu" aria-expanded="false">☰</button>
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#habilidades">Habilidades</a></li>
+      <li><a href="#projeto">Projeto</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+  </div>
+</header>
+
+<main class="wrap">
+
+  <!-- HERO -->
+  <section id="topo">
+    <div class="hero">
+      <h1>Enzo Fuchs Bento</h1>
+      <div class="role">Desenvolvedor de software em formação</div>
+      <p class="lede">Estudante de Análise e Desenvolvimento de Sistemas construindo pontes entre código e o mundo físico, de scripts de automação a sensores lendo temperatura e umidade em tempo real.</p>
+      <div class="hero-actions">
+        <a class="btn btn-primary" href="https://github.com/enzofuchsb" target="_blank" rel="noopener">Ver GitHub →</a>
+        <a class="btn btn-ghost" href="#contato">Falar comigo</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- SOBRE -->
+  <section id="sobre">
+    <span class="eyebrow">sobre mim</span>
+    <div class="about">
+      <div class="about-photo">
+        <img src="foto-perfil.png" alt="Foto de Enzo Fuchs Bento">
+      </div>
+      <div>
+        <h2>Curioso por web, dados e automação</h2>
+        <p>Estou cursando Análise e Desenvolvimento de Sistemas na SPTECH. Já escrevi scripts para automatizar tarefas repetitivas, montei simulações em JavaScript e estou desenvolvendo um trabalho em um projeto de monitoramento com Arduino. O que mais me interessa no momento é desenvolvimento web e desenvolvimento de softwares.</p>
+        <div class="about-meta">
+          <div>Formação<strong>ADS — SPTECH</strong></div>
+          <div>Foco atual<strong>Web · Automação · Dados</strong></div>
+          <div>Contato<strong>enzo.bento@sptech.school</strong></div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HABILIDADES -->
+  <section id="habilidades">
+    <span class="eyebrow">habilidades</span>
+    <h2>Ferramentas que uso no dia a dia</h2>
+    <div class="skill-groups">
+      <div class="skill-card">
+        <h3>front-end</h3>
+        <div class="chip-row">
+          <span class="chip">HTML</span>
+          <span class="chip">CSS</span>
+          <span class="chip">JavaScript</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>back-end &amp; dados</h3>
+        <div class="chip-row">
+          <span class="chip">Python</span>
+          <span class="chip">MySQL</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>hardware</h3>
+        <div class="chip-row">
+          <span class="chip">Arduino</span>
+          <span class="chip">Sensores</span>
+        </div>
+      </div>
+      <div class="skill-card">
+        <h3>ferramentas</h3>
+        <div class="chip-row">
+          <span class="chip">Git</span>
+          <span class="chip">GitHub</span>
+          <span class="chip">VS Code</span>
+          <span class="chip">PyCharm</span>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- PROJETO EM DESTAQUE -->
+  <section id="projeto">
+    <h3 class="eyebrow">projeto em destaque</h3>
+    <div class="project">
+      <div>
+        <span class="project-tag"><span class="led"></span>em desenvolvimento</span>
+        <h3>Monitoramento de umidade e temperatura para estufas de champignon</h3>
+        <p>Protótipo com Arduino para acompanhar em tempo real a umidade do substrato e do ar em estufas de cogumelo Champignon de Paris, um trabalho de pesquisa e inovação em grupo, do qual cuido junto com mais seis colegas.</p>
+        <ul>
+          <li>Sensores de umidade/temperatura do ar (DHT11, DHT22, BME280) e umidade do solo (YL-69, SEN0193)</li>
+          <li>Leituras a cada 5 a 10 minutos, organizadas em JSON e enviadas por HTTP para uma API</li>
+          <li>Dados gravados em banco e exibidos em um dashboard de histórico</li>
+        </ul>
+        <div class="project-cta">
+          <a class="btn btn-ghost" href="https://github.com/enzofuchsb" target="_blank" rel="noopener">Acompanhar no GitHub</a>
+        </div>
+      </div>
+
+      <div class="greenhouse">
+        <div class="gh-row"><span>painel · estufa</span><span id="ghStatus">estável</span></div>
+        <div class="gh-bars">
+          <div>
+            <div class="gh-bar-label"><span>umidade do substrato</span><span class="v" id="moistVal">64%</span></div>
+            <div class="gh-track"><div class="gh-fill moist" id="moistBar" style="width:64%"></div></div>
+          </div>
+          <div>
+            <div class="gh-bar-label"><span>umidade do ar</span><span class="v" id="airVal">81%</span></div>
+            <div class="gh-track"><div class="gh-fill air" id="airBar" style="width:81%"></div></div>
+          </div>
+        </div>
+        <p class="gh-note">Simulação ilustrativa do painel que o protótipo vai alimentar quando o sensor estiver em campo.</p>
+      </div>
+    </div>
+  </section>
+
+  <!-- CTA GITHUB -->
+  <section id="mais-projetos">
+    <div class="gh-banner">
+      <h2>Mais projetos no GitHub</h2>
+      <p>Scripts de automação, exercícios de lógica, trabalhos de faculdade e outras experimentações — tudo o que eu construo passa por lá.</p>
+      <a class="btn btn-primary" href="https://github.com/enzofuchsb" target="_blank" rel="noopener">github.com/enzofuchsb →</a>
+    </div>
+  </section>
+
+</main>
+
+<footer id="contato">
+  <div class="wrap footer-inner">
+    <span class="footer-note">enzo.bento@sptech.school</span>
+    <ul class="footer-links">
+      <li><a href="https://github.com/enzofuchsb" target="_blank" rel="noopener">GitHub</a></li>
+      <li><a href="https://www.linkedin.com/in/enzo-fuchs-422099414/" target="_blank" rel="noopener">LinkedIn</a></li>
+      <li><a href="https://instagram.com/fuchszao" target="_blank" rel="noopener">Instagram</a></li>
+      <li><a href="mailto:enzo.bento@sptech.school">Email</a></li>
+    </ul>
+  </div>
+</footer>
+
+<script>
+  // Nav scroll state
+  const navEl = document.getElementById('siteNav');
+  window.addEventListener('scroll', () => {
+    navEl.classList.toggle('scrolled', window.scrollY > 12);
+  });
+
+  // Mobile nav toggle
+  const navToggle = document.getElementById('navToggle');
+  const navLinks = document.getElementById('navLinks');
+  navToggle.addEventListener('click', () => {
+    const isOpen = navLinks.classList.toggle('open');
+    navToggle.setAttribute('aria-expanded', isOpen);
+  });
+  navLinks.querySelectorAll('a').forEach(a => a.addEventListener('click', () => {
+    navLinks.classList.remove('open');
+    navToggle.setAttribute('aria-expanded', 'false');
+  }));
+
+  // Interactive neon background — glows follow the mouse, gently drift otherwise
+  const glowA = document.getElementById('glowA');
+  const glowB = document.getElementById('glowB');
+  const prefersReduced = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+  if(!prefersReduced && window.matchMedia('(pointer: fine)').matches){
+    let handed = false;
+    window.addEventListener('mousemove', (e) => {
+      if(!handed){
+        glowA.style.animation = 'none';
+        glowB.style.animation = 'none';
+        handed = true;
+      }
+      glowA.style.transform = `translate3d(${e.clientX}px, ${e.clientY}px, 0)`;
+      glowB.style.transform = `translate3d(${e.clientX - 80}px, ${e.clientY + 80}px, 0)`;
+    });
+  }
+
+  // Greenhouse panel simulation (project section)
+  const moistVal = document.getElementById('moistVal');
+  const moistBar = document.getElementById('moistBar');
+  const airVal = document.getElementById('airVal');
+  const airBar = document.getElementById('airBar');
+  const ghStatus = document.getElementById('ghStatus');
+
+  setInterval(() => {
+    const moist = 58 + Math.round(Math.random() * 14);
+    const air = 74 + Math.round(Math.random() * 14);
+    moistVal.textContent = moist + '%';
+    moistBar.style.width = moist + '%';
+    airVal.textContent = air + '%';
+    airBar.style.width = air + '%';
+    ghStatus.textContent = (moist < 60 || air < 76) ? 'atenção' : 'estável';
+  }, 3200);
+</script>
+
+</body>
+</html>
